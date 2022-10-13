@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: whoami
+  namespace: hash-bang
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`whoami.hash-bang.dev`) 
+      services:
+        - name: whoami
+          port: 80
+  tls:
+    secretName: whoami-hashbang-dev-staging

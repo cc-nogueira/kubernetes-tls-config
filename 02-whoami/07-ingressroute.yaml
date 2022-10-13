@@ -1,0 +1,39 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: whoami-http
+  namespace: hash-bang
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`whoami.hash-bang.dev`) || Host(`www.whoami.hash-bang.dev`)
+      middlewares:
+        - name: strip-www-to-https
+        - name: redirect-scheme
+      services:
+        - name: whoami
+          port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: whoami
+  namespace: hash-bang
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`whoami.hash-bang.dev`) || Host(`www.whoami.hash-bang.dev`)
+      middlewares:
+        - name: strip-www-to-https
+        - name: security-headers
+      services:
+        - name: whoami
+          port: 80
+  tls:
+    secretName: whoami-hashbang-dev
+    options:
+      name: tlsoptions

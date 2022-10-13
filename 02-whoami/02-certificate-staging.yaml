@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: whoami-hashbang-dev-staging
+  namespace: hash-bang
+spec:
+  secretName: whoami-hashbang-dev-staging
+  dnsNames:
+    - hash-bang.dev
+    - www.hash-bang.dev
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
